@@ -33,12 +33,13 @@ public class Tarea {
 	
 	@ManyToOne
 	@JoinColumn(name = "proyecto_id", nullable = false)
-	private List<Proyecto> proyectos;
+	private Proyecto proyecto;
 	
 	@ManyToMany
 	@JoinTable(name = "tarea_empleados",
 			joinColumns = @JoinColumn(name = "tarea_id"),
-			inverseJoinColumns = @JoinColumn(name = "empleado_id"))
+			inverseJoinColumns = @JoinColumn(name = "empleado_id")
+	)
 	private List<Empleado> empleados;
 
 	public int getId() {
@@ -73,13 +74,7 @@ public class Tarea {
 		this.costoEstimado = costoEstimado;
 	}
 
-	public List<Proyecto> getProyectos() {
-		return proyectos;
-	}
 
-	public void setProyectos(List<Proyecto> proyectos) {
-		this.proyectos = proyectos;
-	}
 
 	public List<Empleado> getEmpleados() {
 		return empleados;
@@ -89,19 +84,25 @@ public class Tarea {
 		this.empleados = empleados;
 	}
 	
+	public Proyecto getProyectos() {
+		return proyecto;
+	}
+
+	public void setProyectos(Proyecto proyectos) {
+		this.proyecto = proyectos;
+	}
+
 	public Tarea() {
 		
 	}
 
-	public Tarea(int id, String descripcion, LocalDate fechaLimite, double costoEstimado, List<Proyecto> proyectos,
-			List<Empleado> empleados) {
+	public Tarea(int id, String descripcion, LocalDate fechaLimite, double costoEstimado, Proyecto proyecto) {
 		super();
 		this.id = id;
 		this.descripcion = descripcion;
 		this.fechaLimite = fechaLimite;
 		this.costoEstimado = costoEstimado;
-		this.proyectos = proyectos;
-		this.empleados = empleados;
+		this.proyecto = proyecto;
 	}
 
 	

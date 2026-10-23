@@ -26,8 +26,8 @@ public class Empleado {
 	@Column(nullable = false, length = 50)
 	private String cargo;
 	
+	@OneToMany(mappedBy = "empleados")
 	@JsonIgnore
-	@OneToMany(mappedBy = "proyecto")
 	private List<Tarea> tareas;
 
 	public int getId() {
@@ -66,12 +66,10 @@ public class Empleado {
 		
 	}
 
-	public Empleado(int id, String nombre, String cargo, List<Tarea> tareas) {
-		super();
+	public Empleado(int id, String nombre, String cargo) {
 		this.id = id;
 		this.nombre = nombre;
 		this.cargo = cargo;
-		this.tareas = tareas;
 	}
 	
 	
