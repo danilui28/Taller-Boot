@@ -1,6 +1,5 @@
 package com.krakedev.proyectos.entidades;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -29,7 +28,7 @@ public class Empleado {
 	
 	@JsonIgnore
 	@OneToMany(mappedBy = "proyecto")
-	private List<tareas> tareas;
+	private List<Tarea> tareas;
 
 	public int getId() {
 		return id;
@@ -55,11 +54,11 @@ public class Empleado {
 		this.cargo = cargo;
 	}
 
-	public List<tareas> getTareas() {
+	public List<Tarea> getTareas() {
 		return tareas;
 	}
 
-	public void setTareas(List<tareas> tareas) {
+	public void setTareas(List<Tarea> tareas) {
 		this.tareas = tareas;
 	}
 	
@@ -67,7 +66,7 @@ public class Empleado {
 		
 	}
 
-	public Empleado(int id, String nombre, String cargo, List<tareas> tareas) {
+	public Empleado(int id, String nombre, String cargo, List<Tarea> tareas) {
 		super();
 		this.id = id;
 		this.nombre = nombre;

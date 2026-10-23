@@ -32,7 +32,7 @@ public class Proyecto {
 	
 	@JsonIgnore
 	@OneToMany(mappedBy = "proyecto")
-	private List<tareas> tareas;
+	private List<Tarea> tareas;
 	
 	public int getId() {
 		return id;
@@ -66,11 +66,11 @@ public class Proyecto {
 		this.fechaInicio = fechaInicio;
 	}
 
-	public List<tareas> getTareas() {
+	public List<Tarea> getTareas() {
 		return tareas;
 	}
 
-	public void setTareas(List<tareas> tareas) {
+	public void setTareas(List<Tarea> tareas) {
 		this.tareas = tareas;
 	}
 
@@ -79,7 +79,7 @@ public class Proyecto {
 	}
 
 	public Proyecto(int id, String nombre, String descripcion, LocalDate fechaInicio,
-			List<tareas> tareas) {
+			List<Tarea> tareas) {
 		super();
 		this.id = id;
 		this.nombre = nombre;
