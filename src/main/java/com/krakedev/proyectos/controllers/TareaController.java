@@ -47,7 +47,7 @@ public class TareaController {
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<Tarea> buscar(
-			@PathVariable int id) {
+			@PathVariable Integer id) {
 
 		Tarea tarea = servicioTarea.buscar(id);
 
@@ -60,7 +60,7 @@ public class TareaController {
 
 	@PutMapping("/{id}")
 	public ResponseEntity<Tarea> actualizar(
-			@PathVariable int id,
+			@PathVariable Integer id,
 			@RequestBody Tarea tarea) {
 
 		Tarea actualizado =
@@ -75,7 +75,7 @@ public class TareaController {
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> eliminar(
-			@PathVariable int id) {
+			@PathVariable Integer id) {
 
 		boolean eliminado = servicioTarea.eliminar(id);
 

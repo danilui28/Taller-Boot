@@ -19,7 +19,7 @@ public class Proyecto {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private Integer id;
 	
 	@Column(nullable = false, length = 100)
 	private String nombre;
@@ -34,11 +34,11 @@ public class Proyecto {
 	@JsonIgnore
 	private List<Tarea> tareas;
 	
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
@@ -78,7 +78,7 @@ public class Proyecto {
 		
 	}
 
-	public Proyecto(int id, String nombre, String descripcion, LocalDate fechaInicio) {
+	public Proyecto(Integer id, String nombre, String descripcion, LocalDate fechaInicio) {
 		this.id = id;
 		this.nombre = nombre;
 		this.descripcion = descripcion;

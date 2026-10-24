@@ -60,7 +60,7 @@ public class EmpleadoController {
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<?> buscar(
-			@PathVariable int id) {
+			@PathVariable Integer id) {
 		try {
 		Empleado empleado = servicioEmpleado.buscar(id);
 
@@ -78,7 +78,7 @@ public class EmpleadoController {
 
 	@PutMapping("/{id}")
 	public ResponseEntity<?> actualizar(
-			@PathVariable int id,
+			@PathVariable Integer id,
 			@RequestBody Empleado empleado) {
 		
 		try {
@@ -99,7 +99,7 @@ public class EmpleadoController {
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> eliminar(
-			@PathVariable int id) {
+			@PathVariable Integer id) {
 	try {
 		boolean eliminado = servicioEmpleado.eliminar(id);
 

@@ -59,7 +59,7 @@ public class ProyectoController {
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<?> buscar(
-			@PathVariable int id) {
+			@PathVariable Integer id) {
 
 	    try {
 	        Proyecto proyecto = servicioProyecto.buscar(id);
@@ -78,7 +78,7 @@ public class ProyectoController {
 
 	@PutMapping("/{id}")
 	public ResponseEntity<?> actualizar(
-			@PathVariable int id,
+			@PathVariable Integer id,
 			@RequestBody Proyecto proyecto) {
 
         try {
@@ -99,7 +99,7 @@ public class ProyectoController {
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> eliminar(
-			@PathVariable int id) {
+			@PathVariable Integer id) {
 
         try {
             boolean eliminado = servicioProyecto.eliminar(id);

@@ -25,12 +25,12 @@ public class EmpleadoService {
 		return empleadoRepository.findAll();
 	}
 
-	public Empleado buscar(int id) {
+	public Empleado buscar(Integer id) {
 		Optional<Empleado> resultado = empleadoRepository.findById(id);
 		return resultado.orElse(null);
 	}
 
-	public Empleado actualizar(int id, Empleado datos) {
+	public Empleado actualizar(Integer id, Empleado datos) {
 		
 		Empleado empleado = buscar(id);
 		
@@ -45,7 +45,7 @@ public class EmpleadoService {
 		return empleadoRepository.save(empleado);
 	}
 
-	public boolean eliminar(int id) {
+	public boolean eliminar(Integer id) {
 		
 		Empleado proyecto = buscar(id);
 		

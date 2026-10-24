@@ -58,7 +58,7 @@ public class TareaService {
         }
     }
 		
-		public Tarea buscar(int id) {
+		public Tarea buscar(Integer id) {
 			try {
 			Optional<Tarea> resultado = tareaRepository.findById(id);
 			return resultado.orElse(null);
@@ -67,7 +67,7 @@ public class TareaService {
         }
     }
 		
-		public Tarea actualizar(int id, Tarea datos) {
+		public Tarea actualizar(Integer id, Tarea datos) {
 		  try {
 			Tarea tarea = buscar(id);
 			
@@ -88,7 +88,7 @@ public class TareaService {
         }
     }
 		
-		public boolean eliminar(int id) {
+		public boolean eliminar(Integer id) {
 		try {
 			Tarea tarea = buscar(id);
 			

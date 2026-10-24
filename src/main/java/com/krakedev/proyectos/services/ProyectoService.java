@@ -25,12 +25,12 @@ public class ProyectoService {
 		return proyectoRepository.findAll();
 	}
 
-	public Proyecto buscar(int id) {
+	public Proyecto buscar(Integer id) {
 		Optional<Proyecto> resultado = proyectoRepository.findById(id);
 		return resultado.orElse(null);
 	}
 
-	public Proyecto actualizar(int id, Proyecto datos) {
+	public Proyecto actualizar(Integer id, Proyecto datos) {
 		
 		Proyecto proyecto = buscar(id);
 		
@@ -47,7 +47,7 @@ public class ProyectoService {
 		return proyectoRepository.save(proyecto);
 	}
 
-	public boolean eliminar(int id) {
+	public boolean eliminar(Integer id) {
 		
 		Proyecto proyecto = buscar(id);
 		
