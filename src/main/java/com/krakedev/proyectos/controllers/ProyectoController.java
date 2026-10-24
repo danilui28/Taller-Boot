@@ -27,62 +27,93 @@ public class ProyectoController {
 	}
 
 	@PostMapping
-	public ResponseEntity<Proyecto> crear(
+	public ResponseEntity<?> crear(
 			@RequestBody Proyecto proyecto) {
+        try {
+            Proyecto creado = servicioProyecto.crear(proyecto);
 
-		Proyecto creada = servicioProyecto.crear(proyecto);
+            return ResponseEntity
+                    .status(HttpStatus.CREATED)
+                    .body(creado);
 
-		return ResponseEntity
-				.status(HttpStatus.CREATED)
-				.body(creada);
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error al crear el proyecto: " + e.getMessage());
+        }
 	}
 
 	@GetMapping
-	public ResponseEntity<List<Proyecto>> listar() {
+	public ResponseEntity<?> listar() {
+        try {
+            List<Proyecto> proyectos = servicioProyecto.listar();
 
-		List<Proyecto> proyectos = servicioProyecto.listar();
+            return ResponseEntity.ok(proyectos);
 
-		return ResponseEntity.ok(proyectos);
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error al listar los proyectos: " + e.getMessage());
+        }
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Proyecto> buscar(
+	public ResponseEntity<?> buscar(
 			@PathVariable int id) {
 
-		Proyecto proyecto = servicioProyecto.buscar(id);
+	    try {
+	        Proyecto proyecto = servicioProyecto.buscar(id);
 
-		if (proyecto == null) {
-			return ResponseEntity.notFound().build();
-		}
+	        if (proyecto == null) {
+	            return ResponseEntity.notFound().build();
+	        }
 
-		return ResponseEntity.ok(proyecto);
+	        return ResponseEntity.ok(proyecto);
+
+	    } catch (Exception e) {
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+	                .body("Error al buscar el proyecto: " + e.getMessage());
+	    }
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Proyecto> actualizar(
+	public ResponseEntity<?> actualizar(
 			@PathVariable int id,
 			@RequestBody Proyecto proyecto) {
 
-		Proyecto actualizado =
-				servicioProyecto.actualizar(id, proyecto);
+        try {
+            Proyecto actualizado = servicioProyecto.actualizar(id, proyecto);
 
-		if (actualizado == null) {
-			return ResponseEntity.notFound().build();
-		}
+            if (actualizado == null) {
+                return ResponseEntity.notFound().build();
+            }
 
-		return ResponseEntity.ok(actualizado);
+            return ResponseEntity.ok(actualizado);
+
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error al actualizar el proyecto: " + e.getMessage());
+        }
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> eliminar(
+	public ResponseEntity<?> eliminar(
 			@PathVariable int id) {
 
-		boolean eliminado = servicioProyecto.eliminar(id);
+        try {
+            boolean eliminado = servicioProyecto.eliminar(id);
 
-		if (!eliminado) {
-			return ResponseEntity.notFound().build();
-		}
+            if (!eliminado) {
+                return ResponseEntity.notFound().build();
+            }
 
-		return ResponseEntity.noContent().build();
-	}
+            return ResponseEntity.noContent().build();
+
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error al eliminar el proyecto: " + e.getMessage());
+        }
+    }
 }

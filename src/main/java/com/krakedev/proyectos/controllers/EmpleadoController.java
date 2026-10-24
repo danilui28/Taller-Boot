@@ -27,28 +27,41 @@ public class EmpleadoController {
 	}
 
 	@PostMapping
-	public ResponseEntity<Empleado> crear(
+	public ResponseEntity<?> crear(
 			@RequestBody Empleado empleado) {
+		
+        try {
 
 		Empleado creada = servicioEmpleado.crear(empleado);
 
 		return ResponseEntity
 				.status(HttpStatus.CREATED)
 				.body(creada);
+	} catch (Exception e) {
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Error al crear el empleado: " + e.getMessage());
+       }
 	}
 
 	@GetMapping
-	public ResponseEntity<List<Empleado>> listar() {
-
+	public ResponseEntity<?> listar() {
+        try {
+        
 		List<Empleado> empleados = servicioEmpleado.listar();
 
 		return ResponseEntity.ok(empleados);
-	}
+	} catch (Exception e) {
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Error al listar los empleados: " + e.getMessage());
+    }
+  }
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Empleado> buscar(
+	public ResponseEntity<?> buscar(
 			@PathVariable int id) {
-
+		try {
 		Empleado empleado = servicioEmpleado.buscar(id);
 
 		if (empleado == null) {
@@ -56,13 +69,19 @@ public class EmpleadoController {
 		}
 
 		return ResponseEntity.ok(empleado);
+	} catch (Exception e) {
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Error al buscar el empleado: " + e.getMessage());
+    }
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Empleado> actualizar(
+	public ResponseEntity<?> actualizar(
 			@PathVariable int id,
 			@RequestBody Empleado empleado) {
-
+		
+		try {
 		Empleado actualizado =
 				servicioEmpleado.actualizar(id, empleado);
 
@@ -71,12 +90,17 @@ public class EmpleadoController {
 		}
 
 		return ResponseEntity.ok(actualizado);
-	}
+	} catch (Exception e) {
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Error al actualizar el empleado: " + e.getMessage());
+    }
+}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> eliminar(
+	public ResponseEntity<?> eliminar(
 			@PathVariable int id) {
-
+	try {
 		boolean eliminado = servicioEmpleado.eliminar(id);
 
 		if (!eliminado) {
@@ -84,5 +108,10 @@ public class EmpleadoController {
 		}
 
 		return ResponseEntity.noContent().build();
-	}
+	} catch (Exception e) {
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Error al eliminar el empleado: " + e.getMessage());
+    }
+}
 }

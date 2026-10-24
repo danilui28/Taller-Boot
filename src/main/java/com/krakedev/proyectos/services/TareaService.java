@@ -28,7 +28,7 @@ public class TareaService {
 		}
 		  
 		public Tarea guardar(Tarea tarea) {
-			
+			try {
 			Proyecto proyecto = proyectoRepository.findById(tarea.getProyectos().getId())
 					.orElseThrow(() -> new RuntimeException("Proyecto no existe"));
 			
@@ -45,19 +45,30 @@ public class TareaService {
 			tarea.setEmpleados(empleadoDB);
 			
 			return tareaRepository.save(tarea);
-		}
+		} catch (Exception e) {
+            throw new RuntimeException("Error al guardar la tarea: " + e.getMessage(), e);
+        }
+    }
 		
 		public List<Tarea> listar() {
+		  try {
 			return tareaRepository.findAll();
-		}
+		} catch (Exception e) {
+            throw new RuntimeException("Error al listar las tareas: " + e.getMessage(), e);
+        }
+    }
 		
 		public Tarea buscar(int id) {
+			try {
 			Optional<Tarea> resultado = tareaRepository.findById(id);
 			return resultado.orElse(null);
-		}
+		} catch (Exception e) {
+            throw new RuntimeException("Error al buscar la tarea: " + e.getMessage(), e);
+        }
+    }
 		
 		public Tarea actualizar(int id, Tarea datos) {
-			
+		  try {
 			Tarea tarea = buscar(id);
 			
 			if(tarea == null) {
@@ -72,10 +83,13 @@ public class TareaService {
 			
 			return tareaRepository.save(tarea);
 			
-		}
+		} catch (Exception e) {
+            throw new RuntimeException("Error al actualizar la tarea: " + e.getMessage(), e);
+        }
+    }
 		
 		public boolean eliminar(int id) {
-			
+		try {
 			Tarea tarea = buscar(id);
 			
 			if(tarea == null) {
@@ -85,5 +99,9 @@ public class TareaService {
 			tareaRepository.deleteById(id);
 			
 			return true;
-		}
+			
+		} catch (Exception e) {
+            throw new RuntimeException("Error al eliminar la tarea: " + e.getMessage(), e);
+        }
+    }
 	}
