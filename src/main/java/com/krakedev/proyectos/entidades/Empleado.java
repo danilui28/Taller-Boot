@@ -9,7 +9,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -26,7 +26,10 @@ public class Empleado {
 	@Column(nullable = false, length = 50)
 	private String cargo;
 	
-	@OneToMany(mappedBy = "empleados")
+	@Column(nullable = false, length = 100)
+	private String departamento;
+	
+	@ManyToMany(mappedBy = "empleados")
 	@JsonIgnore
 	private List<Tarea> tareas;
 
@@ -62,14 +65,23 @@ public class Empleado {
 		this.tareas = tareas;
 	}
 	
+	public String getDepartamento() {
+		return departamento;
+	}
+
+	public void setDepartamento(String departamento) {
+		this.departamento = departamento;
+	}
+
 	public Empleado() {
 		
 	}
 
-	public Empleado(Integer id, String nombre, String cargo) {
+	public Empleado(Integer id, String nombre, String cargo, String departamento) {
 		this.id = id;
 		this.nombre = nombre;
 		this.cargo = cargo;
+		this.departamento = departamento;
 	}
 	
 	

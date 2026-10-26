@@ -81,6 +81,8 @@ public class TareaService {
 			
 			tarea.setFechaLimite(datos.getFechaLimite());
 			
+			tarea.setEstado(datos.getEstado());
+			
 			return tareaRepository.save(tarea);
 			
 		} catch (Exception e) {

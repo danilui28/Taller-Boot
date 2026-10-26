@@ -27,28 +27,38 @@ public class TareaController {
 	}
 
 	@PostMapping
-	public ResponseEntity<Tarea> crear(
+	public ResponseEntity<?> crear(
 			@RequestBody Tarea tarea) {
-
+    try {
 		Tarea creada = servicioTarea.guardar(tarea);
 
 		return ResponseEntity
 				.status(HttpStatus.CREATED)
 				.body(creada);
+	} catch (Exception e) {
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Error al crear la tarea: " + e.getMessage());
+       }
 	}
 
 	@GetMapping
-	public ResponseEntity<List<Tarea>> listar() {
-
+	public ResponseEntity<?> listar() {
+    try {
 		List<Tarea> tareas = servicioTarea.listar();
 
 		return ResponseEntity.ok(tareas);
-	}
+	} catch (Exception e) {
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Error al listar las tareas: " + e.getMessage());
+    }
+  }
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Tarea> buscar(
+	public ResponseEntity<?> buscar(
 			@PathVariable Integer id) {
-
+    try {
 		Tarea tarea = servicioTarea.buscar(id);
 
 		if (tarea == null) {
@@ -56,33 +66,47 @@ public class TareaController {
 		}
 
 		return ResponseEntity.ok(tarea);
-	}
+		
+	} catch (Exception e) {
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Error al buscar la tarea: " + e.getMessage());
+    }
+}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Tarea> actualizar(
+	public ResponseEntity<?> actualizar(
 			@PathVariable Integer id,
 			@RequestBody Tarea tarea) {
-
+    try {
 		Tarea actualizado =
 				servicioTarea.actualizar(id, tarea);
-
 		if (actualizado == null) {
 			return ResponseEntity.notFound().build();
 		}
 
 		return ResponseEntity.ok(actualizado);
-	}
+	} catch (Exception e) {
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Error al actualizar la tarea: " + e.getMessage());
+    }
+}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> eliminar(
+	public ResponseEntity<?> eliminar(
 			@PathVariable Integer id) {
-
+    try {
 		boolean eliminado = servicioTarea.eliminar(id);
-
+ 
 		if (!eliminado) {
 			return ResponseEntity.notFound().build();
 		}
 
 		return ResponseEntity.noContent().build();
-	}
-}
+	} catch (Exception e) {
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Error al eliminar la tarea: " + e.getMessage());
+    }
+}}

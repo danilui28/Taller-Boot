@@ -42,6 +42,8 @@ public class EmpleadoService {
 		
 		empleado.setCargo(datos.getCargo());
 		
+		empleado.setDepartamento(datos.getDepartamento());
+		
 		return empleadoRepository.save(empleado);
 	}
 
