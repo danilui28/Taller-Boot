@@ -5,6 +5,8 @@ import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -99,36 +101,28 @@ public class AuthController {
     }
     
     @GetMapping("/perfil")
-    public ResponseEntity<?> verPerfil(@RequestHeader(value = "Authorization", required = false) String authHeader) {
-
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body("Acceso Denegado: Debes proveer un token Bearer válido en la cabecera Authorization");
-        }
-
-        String token = authHeader.substring(7);
-
+    public ResponseEntity<?> verPerfil() {
         try {
-            DecodedJWT datosToken = JwtUtil.validarToken(token);
 
-            String usuario = datosToken.getSubject();
-            String rol = datosToken.getClaim("rol").asString();
-
-            return ResponseEntity.ok(Map.of(
-            		"Mensaje", "Bienvenido usuario",
-                    "usuario", usuario,
-                    "rol", rol,
-                    "Status", "Autenticado Correctamente"
-            ));
-
-        } catch (JWTVerificationException e) {
+        	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        	
+        	String usuario = auth.getName();
+        	String rol = auth.getAuthorities().iterator().next().getAuthority();
+        	
+        	return ResponseEntity.ok(Map.of(
+        			"Mensaje", "Bienvenido al sistema protegido por Spring Security", 
+        			"Usuario", usuario,
+        			"rol_detectado", rol,
+        			"status", "Autenticado exitosamente"));
+        	
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body("Acceso Denegado: Token Inválido o Expirado");
+                    .body("Acceso denegado: Usuario no autenticado");
         }
     }
     
     @PostMapping("/logout")
-    public ResponseEntity<?> logout(@RequestHeader(value = "Authorization", required = false)String authHeader) {
+    public ResponseEntity<?> logout(@RequestHeader(value = "Authorization", required = false) String authHeader) {
 
         if (authHeader == null || !authHeader.startsWith("Bearer ") || authHeader.length() <= 7) {
             return ResponseEntity
