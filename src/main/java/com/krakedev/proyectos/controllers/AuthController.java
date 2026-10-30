@@ -60,23 +60,21 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Map<String, String> credenciales) {
 
-            String username = credenciales.get("username");
-            String password = credenciales.get("password");
+        String username = credenciales.get("username");
+        String password = credenciales.get("password");
 
-            if (username == null || password == null) {
+        if (username == null || password == null) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of(
+                            "error", "Debe indicar username y password"
+                    ));
+        }
 
-                return ResponseEntity.badRequest()
-                        .body(Map.of(
-                                "error", "Debe indicar username y password"
-                        ));
-            }
-            
-            try {
+        try {
 
             boolean autenticado = usuarioService.autenticar(username, password);
 
             if (!autenticado) {
-
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                         .body(Map.of(
                                 "error", "Usuario o contraseña incorrectos"
@@ -85,16 +83,25 @@ public class AuthController {
 
             Usuario usuario = usuarioService.buscar(username);
 
+            String token = JwtUtil.generarToken(
+                    usuario.getUsername(),
+                    usuario.getRol()
+            );
+
             return ResponseEntity.ok(
                     Map.of(
                             "mensaje", "Login exitoso",
                             "username", usuario.getUsername(),
-                            "rol", usuario.getRol()));
+                            "rol", usuario.getRol(),
+                            "token", token,
+                            "tipo", "Bearer"
+                    )
+            );
 
         } catch (Exception e) {
 
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-            		.body(Map.of(
+                    .body(Map.of(
                             "error", "Error interno durante la autenticación"
                     ));
         }

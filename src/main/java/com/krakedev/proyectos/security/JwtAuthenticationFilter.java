@@ -29,56 +29,71 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-			throws ServletException, IOException {
-		try {
+	        throws ServletException, IOException {
 
-		String authHeader = request.getHeader("Authorization");
-		
-		if(authHeader == null || !authHeader.startsWith("Bearer ")) {
-			filterChain.doFilter(request, response);
-			return;
-		}
-		
-		String token = authHeader.substring(7);
-		
-        if (token.isBlank()) {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.getWriter().write("Token no proporcionado");
-            return;
-        }
-		
-		if(blackListService.estaInvalidado(token)) {
-			
-			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-			
-			response.getWriter().write("Acceso denegado: Sesión cerrada");
-			
-			return;
-		}
-		
-		DecodedJWT datosToken = JwtUtil.validarToken(token);
-		
-		if(datosToken != null) {
-			
-			String username = datosToken.getSubject();
-			String rolOriginal = datosToken.getClaim("rol").asString();
-			
-			String rolSpring = "ROLE_" + rolOriginal;
-			
-			SimpleGrantedAuthority authority = new SimpleGrantedAuthority(rolSpring);
-			
-			UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(username, null,
-					Collections.singleton(authority));
-			
-			SecurityContextHolder.getContext().setAuthentication(authentication);
-			
-		}} catch (Exception e) {
-            SecurityContextHolder.clearContext();
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.getWriter().write("Token inválido o expirado: " + e.getMessage());
-            return;
-        }
-		
-		filterChain.doFilter(request, response);
+	    try {
+
+	        String authHeader = request.getHeader("Authorization");
+
+	        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+	            filterChain.doFilter(request, response);
+	            return;
+	        }
+
+	        String token = authHeader.substring(7);
+
+	        if (token.isBlank()) {
+	            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+	            response.getWriter().write("Token no proporcionado");
+	            return;
+	        }
+
+	        if (blackListService.estaInvalidado(token)) {
+	            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+	            response.getWriter().write("Acceso denegado: Sesión cerrada");
+	            return;
+	        }
+
+	        DecodedJWT datosToken = JwtUtil.validarToken(token);
+
+	        if (datosToken == null) {
+	            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+	            response.getWriter().write("Token inválido o expirado");
+	            return;
+	        }
+
+	        String username = datosToken.getSubject();
+	        String rolOriginal = datosToken.getClaim("rol").asString();
+
+	        if (username == null || rolOriginal == null) {
+	            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+	            response.getWriter().write("Datos del token inválidos");
+	            return;
+	        }
+
+	        String rolSpring = "ROLE_" + rolOriginal;
+
+	        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(rolSpring);
+
+	        UsernamePasswordAuthenticationToken authentication =
+	                new UsernamePasswordAuthenticationToken(
+	                        username,
+	                        null,
+	                        Collections.singleton(authority)
+	                );
+
+	        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+	    } catch (Exception e) {
+
+	        SecurityContextHolder.clearContext();
+
+	        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+	        response.getWriter().write("Token inválido o expirado");
+
+	        return;
+	    }
+
+	    filterChain.doFilter(request, response);
 	}
 }
